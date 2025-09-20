@@ -1,0 +1,1086 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alkatraz — Креативное Портфолио</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Общие стили и сброс */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary-color: #f0f0f0;
+            --secondary-color: #333;
+            --accent-color: #8A2BE2; /* Фиолетовый акцент */
+            --dark-bg: #0d0d0d;
+            --light-bg: #1c1c1c;
+            --text-color: #fff;
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Roboto', sans-serif;
+            --font-alt: 'Orbitron', sans-serif;
+            --mouse-x: 50vw;
+            --mouse-y: 50vh;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-color);
+            background-color: var(--dark-bg);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Пользовательский курсор */
+        .custom-cursor, .custom-cursor-2 {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            will-change: transform;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            transform: translate(calc(var(--mouse-x) - 50%), calc(var(--mouse-y) - 50%));
+        }
+
+        .custom-cursor {
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-color);
+            mix-blend-mode: exclusion;
+            filter: blur(8px);
+            opacity: 0.7;
+            transition: transform 0.1s ease-out, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .custom-cursor-2 {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            transition: transform 0.05s linear, width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+        }
+
+        .custom-cursor.active {
+            width: 15px;
+            height: 15px;
+            opacity: 1;
+            transform: translate(calc(var(--mouse-x) - 50%), calc(var(--mouse-y) - 50%)) scale(0.5);
+        }
+        .custom-cursor-2.active {
+            width: 15px;
+            height: 15px;
+            background-color: var(--accent-color);
+            transform: translate(calc(var(--mouse-x) - 50%), calc(var(--mouse-y) - 50%)) scale(2.2);
+        }
+
+        /* Секции */
+        section, footer {
+            padding: 100px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-alt);
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 70px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--accent-color);
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .section-title.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 1. Hero Section */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        /* Параллакс-эффект фона: динамический градиент с реакцией на курсор */
+        .hero-bg-parallax {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: 
+                radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(138, 43, 226, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at top left, #2c005f 0%, transparent 50%),
+                radial-gradient(circle at bottom right, #001f3f 0%, transparent 50%),
+                linear-gradient(135deg, #0d0d0d, #1a1a1a);
+            background-size: cover, cover, cover, cover;
+            animation: gradient-particle-animation 20s ease infinite;
+            z-index: -3;
+            will-change: transform, background-position;
+        }
+
+        @keyframes gradient-particle-animation {
+            0% { background-position: 0% 0%, center, center, center; }
+            50% { background-position: 100% 100%, center, center, center; }
+            100% { background-position: 0% 0%, center, center, center; }
+        }
+
+        /* Дополнительный слой для большего параллакса (звездная пыль) */
+        .hero-bg-layer-2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="2" fill="rgba(255,255,255,0.07)"/></svg>');
+            background-size: 30px 30px;
+            animation: move-particles-slow 120s linear infinite;
+            z-index: -2;
+            will-change: transform, background-position;
+        }
+        
+        @keyframes move-particles-slow {
+            from { background-position: 0 0; }
+            to { background-position: 3000px 1500px; }
+        }
+
+        /* Ближний слой частиц с реакцией на мышь */
+        .hero-bg-layer-3 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: 15px 15px;
+            animation: move-particles-fast 80s linear infinite;
+            z-index: -1;
+            will-change: transform, background-position;
+        }
+
+        @keyframes move-particles-fast {
+            from { background-position: 0 0; }
+            to { background-position: 2000px 1000px; }
+        }
+
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-family: var(--font-alt);
+            font-size: 6rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            color: var(--primary-color);
+            text-shadow: 0 0 25px var(--accent-color);
+        }
+
+        .letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(-50px) scale(0.8);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .letter.animated {
+            animation: bounce-in 0.8s ease-out forwards;
+        }
+
+        @keyframes bounce-in {
+            0% { transform: translateY(-50px) scale(0.8); opacity: 0; }
+            60% { transform: translateY(15px) scale(1.05); }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .hero-slogan {
+            font-family: var(--font-body);
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 30px;
+            opacity: 0;
+            letter-spacing: 2px;
+        }
+
+        .hero-slogan.is-visible {
+            animation: fade-in 1.5s forwards 1s;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Новая анимация при прокрутке */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Кнопки */
+        .cta-button {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1.3rem;
+            padding: 18px 45px;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 50px;
+            cursor: none;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.8);
+            background: #9932CC;
+        }
+        
+        .cta-button:hover::before {
+            transform: scale(2);
+            opacity: 1;
+        }
+
+        /* 2. About Section */
+        .about-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 100px;
+            background-color: var(--light-bg);
+            padding: 100px 5%;
+        }
+
+        .about-photo-container {
+            position: relative;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            border: 5px solid var(--accent-color);
+            transform: rotateY(0);
+            transition: transform 0.6s ease-out;
+        }
+
+        .about-photo-container.is-visible {
+            transform: rotateY(360deg);
+        }
+
+        .about-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: grayscale(80%);
+            transition: filter 0.5s ease;
+        }
+        .about-photo:hover {
+            filter: grayscale(0%);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 120%;
+            height: 120%;
+            background: linear-gradient(45deg, rgba(138, 43, 226, 0.1), transparent, rgba(138, 43, 226, 0.1));
+            background-size: 200% 200%;
+            animation: shine 8s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 0.5; }
+            50% { transform: translate(50%, 50%) rotate(180deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) rotate(360deg); opacity: 0.5; }
+        }
+
+        .about-text-content {
+            max-width: 550px;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .about-text-content.is-visible {
+            opacity: 1;
+        }
+
+        .typing-text {
+            min-height: 120px;
+            line-height: 1.8;
+            font-size: 1.2rem;
+            white-space: pre-wrap;
+            position: relative;
+        }
+        .typing-text::after {
+            content: '|';
+            position: absolute;
+            right: 0;
+            opacity: 1;
+            animation: blink-caret .75s step-end infinite;
+        }
+        .typing-text.typed::after {
+            animation: none;
+            opacity: 0;
+        }
+
+        @keyframes blink-caret {
+            from, to { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .social-icons {
+            margin-top: 40px;
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap; /* Добавлено для адаптивности */
+            justify-content: center; /* Центрирование иконок */
+        }
+
+        /* Новый стиль кнопок социальных сетей (Неон) */
+        .social-link {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--text-color);
+            text-decoration: none;
+            position: relative;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+            cursor: none;
+            border: 1px solid transparent;
+            box-shadow: 0 0 5px rgba(255,255,255,0.1);
+            display: flex; /* Для выравнивания иконки и текста */
+            align-items: center;
+            gap: 10px; /* Расстояние между иконкой и текстом */
+        }
+
+        .social-link i {
+            font-size: 1.5rem; /* Размер иконки */
+            transition: transform 0.3s ease;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color);
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+            border-radius: 8px;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            border-color: var(--color);
+            box-shadow: 0 0 25px var(--color);
+        }
+
+        .social-link:hover::before {
+            opacity: 0.8;
+        }
+
+        .social-link:hover i {
+            transform: scale(1.1);
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            border-color: var(--color);
+            box-shadow: 0 0 25px var(--color);
+        }
+
+        .social-link:hover::before {
+            opacity: 0.8;
+        }
+
+        .social-link:hover i {
+            transform: scale(1.1);
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            border-color: var(--color);
+            box-shadow: 0 0 25px var(--color);
+        }
+
+        .social-link:hover::before {
+            opacity: 0.8;
+        }
+
+        .social-link:hover i {
+            transform: scale(1.1);
+        }
+
+        /* 3. Gallery Section */
+        .gallery-section {
+            background-color: var(--dark-bg);
+            padding: 100px 5%;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-auto-rows: minmax(250px, auto);
+            gap: 30px;
+            grid-template-areas:
+                "a b b"
+                "a c d"
+                "e c d";
+        }
+
+        .work-item:nth-child(1) { grid-area: a; }
+        .work-item:nth-child(2) { grid-area: b; }
+        .work-item:nth-child(3) { grid-area: c; }
+        .work-item:nth-child(4) { grid-area: d; }
+        .work-item:nth-child(5) { grid-area: e; }
+
+        .work-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            text-decoration: none;
+            color: var(--text-color);
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0;
+            transform: translateY(100px);
+            border: 2px solid transparent;
+        }
+
+        .work-item.is-visible {
+            animation: fly-in-up 1.2s forwards ease-out;
+        }
+
+        @keyframes fly-in-up {
+            from { transform: translateY(100px) scale(0.9); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .work-item:hover {
+            transform: scale(1.03) rotateZ(1deg);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.6);
+            border-color: var(--accent-color);
+        }
+
+        .work-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            transform: translateY(100%);
+            transition: transform 0.4s ease-out;
+        }
+
+        .work-item:hover .work-content {
+            transform: translateY(0);
+        }
+
+        .work-title {
+            font-family: var(--font-heading);
+            font-size: 1.7rem;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .work-type {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 1px;
+        }
+        
+        /* Стили для раздела "Инструменты" */
+        #tools-section {
+            background-color: var(--light-bg);
+        }
+
+        .tools-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .tool-item {
+            background: rgba(255, 255, 255, 0.05); /* Серый фон по умолчанию */
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1); /* Серая рамка по умолчанию */
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            position: relative;
+            transition: all 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; /* Добавлены переходы для цвета */
+            cursor: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Серая тень по умолчанию */
+            text-align: center;
+        }
+
+        /* Цвета для разных типов инструментов при наведении */
+        .tool-item:hover {
+            background: var(--hover-color);
+            border-color: var(--hover-color);
+            box-shadow: 0 0 25px var(--hover-color);
+            transform: translateY(-5px);
+        }
+
+        /* 4. Footer Section */
+        .footer-section {
+            background-color: var(--light-bg);
+            padding: 80px 5%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 60px;
+        }
+
+        .contact-form-container, .contact-info {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .form-title, .contact-title {
+            font-family: var(--font-alt);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+            position: relative;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Неоновая подсветка полей формы */
+        .contact-form input, .contact-form textarea {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 12px;
+            padding: 18px;
+            color: var(--text-color);
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.7);
+        }
+
+        /* Новый стиль кнопки "Отправить" */
+        .submit-button {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: skewX(-30deg);
+            transition: left 0.6s ease;
+        }
+        .submit-button:hover::before {
+            left: 100%;
+        }
+
+        .submit-button:hover {
+            background-color: #9932CC;
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.8);
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Жидкий эффект для ссылок */
+        .contact-link {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            padding: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: none;
+        }
+
+        .contact-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+            z-index: -1;
+        }
+        .contact-link:hover::before {
+            transform: translateY(0);
+        }
+        
+        .contact-link:hover {
+            color: var(--text-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .contact-link .icon {
+            font-size: 1.5rem; /* Размер иконки */
+            color: rgba(255, 255, 255, 0.7); /* Цвет иконки по умолчанию */
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .contact-link:hover .icon {
+            color: var(--text-color); /* Цвет иконки при наведении */
+            transform: scale(1.1);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 900px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+            .hero-slogan {
+                font-size: 1.2rem;
+            }
+            .about-section {
+                flex-direction: column;
+                gap: 50px;
+                text-align: center;
+            }
+            .about-photo-container {
+                order: 2;
+                width: 300px;
+                height: 300px;
+            }
+            .gallery-grid {
+                grid-template-areas: none;
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 2.5rem;
+            }
+            .form-title, .contact-title {
+                font-size: 2rem;
+            }
+            .footer-content {
+                flex-direction: column;
+            }
+            .footer-logo {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            .hero-slogan {
+                font-size: 1rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .cta-button {
+                font-size: 1rem;
+                padding: 12px 30px;
+            }
+            .typing-text {
+                font-size: 1rem;
+            }
+            .social-icons {
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+            }
+            .social-link {
+                width: 200px;
+            }
+        }
+
+        /* Styles for Django messages */
+        .messages {
+            list-style: none;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .messages li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .messages li.success {
+            background-color: rgba(46, 204, 113, 0.2); /* Greenish */
+            border: 1px solid rgba(46, 204, 113, 0.5);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+        }
+
+        .messages li.error {
+            background-color: rgba(231, 76, 60, 0.2); /* Reddish */
+            border: 1px solid rgba(231, 76, 60, 0.5);
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
+        }
+
+        .messages li:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <header class="hero-section">
+        <div class="hero-bg-parallax"></div>
+        <div class="hero-bg-layer-2"></div>
+        <div class="hero-bg-layer-3"></div>
+        <div class="hero-content">
+            <h1 class="hero-title" aria-label="Alkatraz">
+                <span class="letter">A</span>
+                <span class="letter">l</span>
+                <span class="letter">k</span>
+                <span class="letter">a</span>
+                <span class="letter">t</span>
+                <span class="letter">r</span>
+                <span class="letter">a</span>
+                <span class="letter">z</span>
+            </h1>
+            <p class="hero-slogan">Освобождаю идеи. Создаю будущее.</p>
+            <a href="#gallery" class="cta-button">Посмотреть работы</a>
+        </div>
+    </header>
+
+    <section class="about-section">
+        <div class="about-photo-container fade-in-up">
+            <img src="{% static 'myapp/img/myphoto.png' %}" alt="Анимированное фото" class="about-photo">
+            <div class="photo-overlay"></div>
+        </div>
+        <div class="about-text-content fade-in-up">
+            <h2 class="section-title">Обо мне</h2>
+            <p id="bio-text" class="typing-text"></p>
+            <div class="social-icons">
+                <a href="https://github.com/yourprofile" target="_blank" class="social-link" style="--color: #6e5494;">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank" class="social-link" style="--color: #0077B5;">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="https://twitter.com/yourprofile" target="_blank" class="social-link" style="--color: #1DA1F2;">
+                    <i class="fab fa-twitter"></i> Twitter
+                </a>
+                <a href="https://behance.net/yourprofile" target="_blank" class="social-link" style="--color: #0077b5;">
+                    <i class="fab fa-behance"></i> Behance
+                </a>
+                <a href="https://dribbble.com/yourprofile" target="_blank" class="social-link" style="--color: #ea4c89;">
+                    <i class="fab fa-dribbble"></i> Dribbble
+                </a>
+                <a href="https://instagram.com/yourprofile" target="_blank" class="social-link" style="--color: #E1306C;">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery-section">
+        <h2 class="section-title">Галерея работ</h2>
+        <div class="gallery-grid">
+            <a href="https://golbol112.pythonanywhere.com/" class="work-item" style="--bg-image: url('{% static 'myapp/img/PixGame.png' %}');">
+                <div class="work-content">
+                    <h3 class="work-title">PixGame</h3>
+                    <p class="work-type">Game Development | UI/UX</p>
+                </div>
+            </a>
+            <a href="https://main11home11.pythonanywhere.com/" class="work-item" style="--bg-image: url('{% static 'myapp/img/casino.png' %}');">
+                <div class="work-content">
+                    <h3 class="work-title">Казино Alkatraz</h3>
+                    <p class="work-type">Web Development | Backend</p>
+                </div>
+            </a>
+            <a href="#" class="work-item" style="--bg-image: url('{% static 'myapp/img/BarberShop.png' %}');">
+                <div class="work-content">
+                    <h3 class="work-title">Барбершоп Alkatraz</h3>
+                    <p class="work-type">Web Development | UI/UX</p>
+                </div>
+            </a>
+            <a href="#" class="work-item" style="--bg-image: url('{% static 'myapp/img/TaskTracker.png' %}');">
+                <div class="work-content">
+                    <h3 class="work-title">Task Tracker</h3>
+                    <p class="work-type">Web Development | Backend</p>
+                </div>
+            </a>
+            <a href="#" class="work-item" style="--bg-image: url('https://via.placeholder.com/600x600/6A5ACD/FFFFFF?text=Проект+5');">
+                <div class="work-content">
+                    <h3 class="work-title">Echoes of Tomorrow</h3>
+                    <p class="work-type">Concept Art</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section id="tools-section" class="fade-in-up">
+        <h2 class="section-title">Мои инструменты</h2>
+        <ul class="tools-list">
+            <li class="tool-item" data-type="ai" style="--hover-color: #9b59b6;"><i class="fas fa-robot"></i> ChatGPT API</li>
+            <li class="tool-item" data-type="ai" style="--hover-color: #8e44ad;"><i class="fas fa-palette"></i> Midjourney</li>
+            <li class="tool-item" data-type="ai" style="--hover-color: #e74c3c;"><i class="fas fa-paint-brush"></i> DALL-E</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #3498db;"><i class="fab fa-python"></i> Python</li>
+            <li class="tool-item" data-type="frontend" style="--hover-color: #f1c40f;"><i class="fab fa-js"></i> JavaScript (JS)</li>
+            <li class="tool-item" data-type="frontend" style="--hover-color: #e67e22;"><i class="fab fa-html5"></i> HTML</li>
+            <li class="tool-item" data-type="frontend" style="--hover-color: #2ecc71;"><i class="fab fa-css3-alt"></i> CSS</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #27ae60;"><i class="fas fa-leaf"></i> Django</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #1abc9c;"><i class="fas fa-bolt"></i> FastAPI</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #c0392b;"><i class="fas fa-flask"></i> Flask</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #34495e;"><i class="fas fa-database"></i> SQL</li>
+            <li class="tool-item" data-type="frontend" style="--hover-color: #61dafb;"><i class="fab fa-react"></i> React</li>
+            <li class="tool-item" data-type="frontend" style="--hover-color: #42b883;"><i class="fab fa-vuejs"></i> Vue.js</li>
+            <li class="tool-item" data-type="frontend" style="--hover-color: #dd0031;"><i class="fab fa-angular"></i> Angular</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #68a063;"><i class="fab fa-node-js"></i> Node.js</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #47a248;"><i class="fas fa-database"></i> MongoDB</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #336791;"><i class="fas fa-database"></i> PostgreSQL</li>
+            <li class="tool-item" data-type="backend" style="--hover-color: #0db7ed;"><i class="fab fa-docker"></i> Docker</li>
+        </ul>
+    </section>
+
+    <footer class="footer-section">
+        <div class="footer-content">
+            <div class="contact-form-container fade-in-up">
+                <h3 class="form-title">Связь со мной</h3>
+                <form action="{% url 'send_email' %}" method="post" class="contact-form">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="Ваша почта" required>
+                    <textarea name="message" placeholder="Ваше сообщение..." required></textarea>
+                    <button type="submit" class="submit-button">Отправить</button>
+                </form>
+            </div>
+            <div class="contact-info fade-in-up">
+                <h3 class="contact-title">Контакты</h3>
+                <div class="contact-links">
+                    <a href="mailto:contact@alkatraz.com" class="contact-link">
+                        <i class="fas fa-envelope icon"></i> golbol112@gmail.com
+                    </a>
+                    <a href="tel:+1234567890" class="contact-link">
+                        <i class="fas fa-phone icon"></i> +0973730264
+                    </a>
+                </div>
+                <div class="footer-logo">
+                    <img src="{% static 'myapp/img/Logo.png' %}" alt="Alkatraz Logo" style="width: 100px; height: 100px; border-radius: 50%; animation: logo-spin 10s linear infinite;">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-2"></div>
+
+    <script>
+        // 1. Анимация появления имени (Bounce effect)
+        const heroTitle = document.querySelector('.hero-title');
+        const letters = heroTitle.querySelectorAll('.letter');
+
+        letters.forEach((letter, index) => {
+            letter.style.animationDelay = `${index * 0.07}s`;
+            letter.classList.add('animated');
+        });
+
+        // 2. Анимация печати текста "Обо мне"
+        const bioTextElement = document.getElementById('bio-text');
+        const bioTextContent = "Привет! Меня зовут Игорь Мельниченко, и я — креативный разработчик и художник, специализирующийся на создании захватывающих цифровых миров и интерактивных веб-интерфейсов. Моя страсть — это слияние технологий и искусства. Обладая 4-летним опытом в Python-разработке и годом в веб-разработке, я использую новейшие AI-инструменты и классические подходы, чтобы превращать сложные идеи в элегантные и интуитивно понятные решения.";
+        let bioTextTyped = false; // Флаг для отслеживания, был ли текст уже напечатан
+
+        function typeText(element, text, speed) {
+            let i = 0;
+            element.textContent = '';
+            const typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                    element.classList.add('typed');
+                }
+            }, speed);
+        }
+
+        // 3. Анимация появления разделов при прокрутке
+        const aboutTextContentDiv = document.querySelector('.about-text-content'); // Получаем ссылку на div.about-text-content
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+
+                    // Если это секция "Обо мне", запускаем анимацию печати
+                    if (entry.target === aboutTextContentDiv && !bioTextTyped) {
+                        typeText(bioTextElement, bioTextContent, 50);
+                        bioTextTyped = true; // Устанавливаем флаг, что текст напечатан
+                        observer.unobserve(entry.target); // Отключаем наблюдение после запуска анимации
+                    }
+                    // Если это галерея, запускаем анимацию для элементов
+                    else if (entry.target.querySelector('.gallery-grid')) {
+                        document.querySelectorAll('.work-item').forEach((item, index) => {
+                            item.style.animationDelay = `${index * 0.15}s`;
+                            item.classList.add('is-visible');
+                        });
+                        observer.unobserve(entry.target); // Отключаем наблюдение после появления элементов галереи
+                    } else {
+                        // Для других элементов, которые должны анимироваться один раз (section-title, hero-slogan, about-photo-container)
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, {
+            threshold: 0.3
+        });
+
+        // Наблюдаем за всеми соответствующими элементами
+        document.querySelectorAll('.fade-in-up, .section-title, .about-photo-container, .hero-slogan').forEach(el => {
+            observer.observe(el);
+        });
+        // Элементы галереи должны наблюдаться отдельно, чтобы их анимация запускалась
+        document.querySelectorAll('.work-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 4. Эффект пользовательского курсора
+        const cursor = document.querySelector('.custom-cursor');
+        const cursor2 = document.querySelector('.custom-cursor-2');
+
+        window.addEventListener('mousemove', e => {
+            const x = e.clientX;
+            const y = e.clientY;
+            document.documentElement.style.setProperty('--mouse-x', `${x}px`);
+            document.documentElement.style.setProperty('--mouse-y', `${y}px`);
+        });
+
+        document.querySelectorAll('a, button, .cta-button, .social-link, .tool-item, .contact-link').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.classList.add('active');
+                cursor2.classList.add('active');
+            });
+            link.addEventListener('mouseleave', () => {
+                cursor.classList.remove('active');
+                cursor2.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
